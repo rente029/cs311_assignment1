@@ -25,27 +25,14 @@ using namespace std;
  * @brief Destructor to destroy all nodes and release memory
  */
 LinkedList::~LinkedList() {
-    Node* current = NULL;//place holder to track while I traverse linkedlist
-    current = front; // start at front
-    while(current != NULL)//traverse array loop until not Nodes left
+    while(front != NULL)//traverse array loop until not Nodes left
     {
-        current = front;
-        while(current->next != NULL)//nested loop to find last item
-        {
-            current = current->next;
-        }
-        delete current;//delete last node
-        if(this->length()==0)//if no nodes left quit loop
-        {
-            current = NULL;
-        }
-        else//else continue
-        {
-            current = front;
-        }
+        Node* current = front;//place holder to track while I traverse linkedlist
+        front = front->next;// set front to next node
+        current->next = NULL;
+        delete current;//delete node
+
     }
-    delete this;//delete linked list
-    //TODO: Add code here. Make sure memory is released properly.
 }
 
 /**
@@ -270,10 +257,6 @@ bool LinkedList::deleteAt(int pos, T &val) {
         }
         return true;
     }
-    //TODO: Add code here
-    // check if the pos is valid first, then move the ptr to the rigth positon
-    // consider the special case of deleting the first node and the last node
-    // Do not forget to set value. ?????????
 }
 
 /**
@@ -319,9 +302,6 @@ bool LinkedList::insertAt(int pos, T val) {
         }
     }
     return true;
-    //TODO: Add code here
-    // check if the pos is valid first, then move the ptr to the rigth positon
-    // consider the special case of inserting the first node and the last node
 }
 
 /**
@@ -351,7 +331,6 @@ LinkedList::LinkedList(const LinkedList &other) {
         rear = copyCurrent;//once last element from other copied set same element in our copy to rear since it is the end of the linked list
     }
     return;
-    // TODO: Add code here. Interate through the other list and add a new node to this list
     // for each node in the other list. The new node should have the same value as the other node.
 }
 
@@ -368,7 +347,6 @@ LinkedList &LinkedList::operator=(const LinkedList &other) {
         {
             this->deleteRear(x);//delete rear node
         }
-        // TODO: Add code here
         // Interate through the other list and add a new node to this list
         // Be sure to set the front and rear pointers to the correct values
         // Be sure to set the count to the correct value
@@ -380,7 +358,6 @@ LinkedList &LinkedList::operator=(const LinkedList &other) {
             current = current->next;//for each element in other add new node to this linkedlist
             this->addRear(current->val);
         }
-        // TODO: Add code here
     }
     return *this;
 }
