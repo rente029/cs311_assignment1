@@ -40,7 +40,7 @@ LinkedList::~LinkedList() {
  * @return true if the list is empty, false otherwise
  */
 bool LinkedList::isEmpty() const {
-    if(front == nullptr)//checks if there is initial node at front return true if empty
+    if(front == NULL)//checks if there is initial node at front return true if empty
         return true;
     else
     {
@@ -136,21 +136,37 @@ void LinkedList::addFront(T val) {
 
 
 bool LinkedList::deleteFront(T &OldNum) {
-    OldNum = front->val;
+    if(front != NULL)
+    {
+        OldNum = front->val;
+    }
+    else
+    {
+        OldNum = NULL;
+    }
     if(this->isEmpty()==true)//check is list empty if so return false
     {
         return false;
     }
     else
     {
+        Node* current = front;
         if(this->length()==1)//if list only has one item set front to null and delete &oldnum
         {
             front = NULL;
             rear = NULL;
+            delete current;
+        }
+        else if(this->length()==2)
+        {
+            front = front->next;//otherwise set front to next node and delete &oldnum
+            rear = front;
+            delete current;
         }
         else
         {
-            front = front->next;//otherwise set front to next node and delete &oldnum
+            front = front->next;
+            delete current;
         }
         return true;
     }
@@ -160,7 +176,14 @@ bool LinkedList::deleteFront(T &OldNum) {
 
 
 bool LinkedList::deleteRear(T &OldNum) {
-    OldNum = rear->val;
+    if(rear != NULL)
+    {
+        OldNum = rear->val;
+    }
+    else
+    {
+        OldNum = NULL;
+    }
     if(this->isEmpty()==true)//check is list empty if so return false
     {
         return false;
@@ -169,7 +192,8 @@ bool LinkedList::deleteRear(T &OldNum) {
     {
         if(this->length()==1)//if list only has one item set front to null and delete &oldnum
         {
-            delete rear;
+            Node* temp = rear;
+            delete temp;
             front = NULL;
             rear = NULL;
         }
@@ -177,12 +201,15 @@ bool LinkedList::deleteRear(T &OldNum) {
         {
             Node* prev = NULL;//saving locaton of previous node to rear
             Node* current = front;
-            while(current->next != NULL )//traverse array
+            while(current->next != NULL )//traverse linked list
             {
                 prev = current;
                 current = current->next;
             }
-            prev->next = NULL;//make prev ptr null
+            if(prev != NULL)
+            {
+                prev->next = NULL;//make prev ptr null
+            }
             rear = prev;//set prev node to new rear
             delete current;//delete old rear
             if(this->length()==1)//if list only has one item set front to null and delete &oldnum
@@ -247,12 +274,18 @@ bool LinkedList::deleteAt(int pos, T &val) {
         else if(count == this->length()-1)//if pos is rear
         {
             rear = prev;//remove rear from list and set rear to prev
-            prev->next = NULL;
+            if(prev != NULL)
+            {
+                prev->next = NULL;
+            }
             delete current;
         }
         else//for everything in between front and rear
         {
-            prev->next = current->next;
+            if(prev != NULL)
+            {
+                prev->next = current->next;
+            }
             delete current;
         }
         return true;
@@ -292,13 +325,19 @@ bool LinkedList::insertAt(int pos, T val) {
         }
         else if(count == this->length())//if pos is rear
         {
-            prev->next = new Node(val);
+            if(prev != NULL)
+            {
+                prev->next = new Node(val);
+            }
         }
         else//everything in between
         {
-            prev->next = new Node(val);//make previous node point to new node
-            prev = prev->next;//make point to prev new node
-            prev->next = current;
+            if(prev != NULL)
+            {
+                prev->next = new Node(val);//make previous node point to new node
+                prev = prev->next;//make point to prev new node
+                prev->next = current;
+            }
         }
     }
     return true;
@@ -342,10 +381,10 @@ LinkedList::LinkedList(const LinkedList &other) {
 LinkedList &LinkedList::operator=(const LinkedList &other) {
     if(this != &other) { // check if the same object
         // Delete all nodes in this list
-        int x = 0;//variable needed for calling delete rear
+        //int x = 0;//variable needed for calling delete rear
         while(this->length()!=0)//loop through each node until there is none left
         {
-            this->deleteRear(x);//delete rear node
+            this->deleteRear(count);//delete rear node
         }
         // Interate through the other list and add a new node to this list
         // Be sure to set the front and rear pointers to the correct values
